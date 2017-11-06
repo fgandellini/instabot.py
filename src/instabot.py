@@ -4,7 +4,7 @@
 import atexit
 import datetime
 import itertools
-import json
+import simplejson
 import logging
 import random
 import signal
@@ -211,10 +211,10 @@ class InstaBot:
             info = self.s.get(user_id_url)
 
             # prevent error if 'Account of user was deleted or link is invalid
-            from json import JSONDecodeError
+            from simplejson import simplejsonDecodeError
             try:
-                all_data = json.loads(info.text)
-            except JSONDecodeError as e:
+                all_data = simplejson.loads(info.text)
+            except simplejsonDecodeError as e:
                 self.write_log('Account of user %s was deleted or link is '
                                'invalid' % (user))
             else:
@@ -327,7 +327,7 @@ class InstaBot:
                 url_tag = self.url_tag % (tag)
                 try:
                     r = self.s.get(url_tag)
-                    all_data = json.loads(r.text)
+                    all_data = simplejson.loads(r.text)
 
                     self.media_by_tag = list(all_data['tag']['media']['nodes'])
                 except:
@@ -658,7 +658,7 @@ class InstaBot:
     def check_exisiting_comment(self, media_code):
         url_check = self.url_media_detail % (media_code)
         check_comment = self.s.get(url_check)
-        all_data = json.loads(check_comment.text)
+        all_data = simplejson.loads(check_comment.text)
         if all_data['graphql']['shortcode_media']['owner']['id'] == self.user_id:
                 self.write_log("Keep calm - It's your own media ;)")
                 # Del media to don't loop on it
@@ -712,7 +712,7 @@ class InstaBot:
                 url_tag = self.url_user_detail % (current_user)
                 try:
                     r = self.s.get(url_tag)
-                    all_data = json.loads(r.text)
+                    all_data = simplejson.loads(r.text)
 
                     self.user_info = all_data['user']
                     i = 0
@@ -798,7 +798,7 @@ class InstaBot:
                 url_tag = 'https://www.instagram.com/?__a=1'
                 try:
                     r = self.s.get(url_tag)
-                    all_data = json.loads(r.text)
+                    all_data = simplejson.loads(r.text)
 
                     self.media_on_feed = list(
                         all_data['graphql']['user']['edge_web_feed_timeline'][
